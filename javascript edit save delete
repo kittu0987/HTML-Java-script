@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Submission</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        .input-form {
+            margin-bottom: 20px;
+        }
+        .action-btn {
+            margin-right: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Enter Details</h1>
+
+<div class="input-form">
+    <form id="detailsForm">
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="address">Address:</label><br>
+        <input type="text" id="address" name="address" required><br><br>
+
+        <label for="city">City:</label><br>
+        <input type="text" id="city" name="city" required><br><br>
+
+        <label for="state">State:</label><br>
+        <input type="text" id="state" name="state" required><br><br>
+
+        <label for="phoneNumber">Phone Number:</label><br>
+        <input type="text" id="phoneNumber" name="phoneNumber" required><br><br>
+
+        <label for="Education">Education:</label><br>
+        <input type="text" id="Education" name="Education" required><br><br>
+
+        <button type="button" onclick="submitDetails()">Submit</button>
+    </form>
+</div>
+
+<h2>Submitted Details</h2>
+<table id="detailsTable">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Address</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Phone Number</th>
+            <th>Education</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<script>
+    function submitDetails() {
+        var name = document.getElementById('name').value;
+        var address = document.getElementById('address').value;
+        var city = document.getElementById('city').value;
+        var state = document.getElementById('state').value;
+        var phoneNumber = document.getElementById('phoneNumber').value;
+        var education = document.getElementById('Education').value;
+
+        var table = document.getElementById('detailsTable').getElementsByTagName('tbody')[0];
+        var newRow = table.insertRow();
+
+        newRow.insertCell(0).textContent = name;
+        newRow.insertCell(1).textContent = address;
+        newRow.insertCell(2).textContent = city;
+        newRow.insertCell(3).textContent = state;
+        newRow.insertCell(4).textContent = phoneNumber;
+        newRow.insertCell(5).textContent = education;
+
+        var actionsCell = newRow.insertCell(6);
+
+        // Create "Edit" button
+        var editBtn = document.createElement("button");
+        editBtn.textContent = "Edit";
+        editBtn.className = "action-btn";
+        editBtn.onclick = function() { editRow(newRow); };
+        actionsCell.appendChild(editBtn);
+
+        // Create "Save" button
+        var saveBtn = document.createElement("button");
+        saveBtn.textContent = "Save";
+        saveBtn.className = "action-btn";
+        saveBtn.style.display = "none";  // Hide Save button initially
+        saveBtn.onclick = function() { saveRow(newRow); };
+        actionsCell.appendChild(saveBtn);
+
+        // Create "Delete" button
+        var deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "Delete";
+        deleteBtn.className = "action-btn";
+        deleteBtn.onclick = function() { deleteRow(newRow); };
+        actionsCell.appendChild(deleteBtn);
+
+        document.getElementById('detailsForm').reset();
+    }
+
+    function editRow(row) {
+        for (let i = 0; i < 6; i++) {
+            let cell = row.cells[i];
+            let input = document.createElement("input");
+            input.type = "text";
+            input.value = cell.textContent;
+            cell.textContent = ""; // Clear cell content
+            cell.appendChild(input); // Add input field
+        }
+        row.cells[6].childNodes[0].style.display = "none"; // Hide Edit button
+        row.cells[6].childNodes[1].style.display = "inline-block"; // Show Save button
+    }
+
+    function saveRow(row) {
+        for (let i = 0; i < 6; i++) {
+            let cell = row.cells[i];
+            cell.textContent = cell.firstChild.value; // Set cell text to input value
+        }
+        row.cells[6].childNodes[0].style.display = "inline-block"; // Show Edit button
+        row.cells[6].childNodes[1].style.display = "none"; // Hide Save button
+    }
+
+    function deleteRow(row) {
+        row.parentNode.removeChild(row); // Remove the row from the table
+    }
+</script>
+
+</body>
+</html>
